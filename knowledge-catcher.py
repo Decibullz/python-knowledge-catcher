@@ -3,11 +3,13 @@
 import turtle
 import random
 import os
+import time
 
 score = 0
 lives = 3
+
 wn = turtle.Screen()
-wn.title("Falling Skies by Cody Snell")
+wn.title("Knowledge Catcher by Cody Snell")
 wn.bgcolor("green")
 wn.bgpic('background.gif')
 wn.setup(width=800, height=600)
@@ -96,6 +98,14 @@ while True:
         x += 3
         player.setx(x)
 
+    # check for border collision
+
+    if player.xcor() > 390:
+        player.setx(390)
+    
+    elif player.xcor() < -390:
+        player.setx(-390)
+
     # Move the good guy
     # good_guy.sety(good_guy.ycor() - .25)
     for good_guy in good_guys:
@@ -108,7 +118,7 @@ while True:
             good_guy.goto(x, y)
 
         # check for collision
-        if good_guy.distance(player) < 40 :
+        if good_guy.distance(player) < 30:
             x = random.randint(-300,300)
             y = random.randint(300, 400)
             good_guy.goto(x, y)
@@ -130,13 +140,32 @@ while True:
         
 
         # check for collision
-        if bad_guy.distance(player) < 40:
-            x = random.randint(-300,300)
-            y = random.randint(300, 400)
-            bad_guy.goto(x, y)
+        if bad_guy.distance(player) < 30:
             os.system("afplay page_tear.wav&")
             score -= 10
             lives -= 1
             pen.clear()
             pen.write("Knowledge: {} , Lives: {}".format(score, lives), align="center", font=font)
+            time.sleep(1)
+            for bad_guy in bad_guys:
+                x = random.randint(-300,300)
+                y = random.randint(300, 400)
+                bad_guy.goto(x, y)
+
+        if lives == 0:
+            pen.clear()
+            pen.write("Game Over! Knowledge: {}".format(score), align="center", font=("Courier", 24, "normal"))
+            for good_guy in good_guys:
+                good_guy.goto(100,250)
+
+            for bad_guy in bad_guys:
+                bad_guy.goto(-100,250)
+            wn.update()
+            time.sleep(5)
+            score = 0
+            lives = 3  
+
+            pen.clear()
+            pen.write("Knowledge: {}  Lives: {}".format(score, lives), align="center", font=("Courier", 24, "normal"))
+
 wn.mainloop()
