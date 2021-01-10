@@ -2,22 +2,26 @@
 
 import turtle
 import random
+import os
 
 score = 0
 lives = 3
 wn = turtle.Screen()
 wn.title("Falling Skies by Cody Snell")
 wn.bgcolor("green")
+wn.bgpic('background.gif')
 wn.setup(width=800, height=600)
 wn.tracer(0)
 
+wn.register_shape("book.gif")
+wn.register_shape("spike_ball.gif")
+wn.register_shape("brain.gif")
 
 #  add the player
 # lowercase letters by convention
 player = turtle.Turtle()
 player.speed(0)
-player.shape("square")
-player.color("white")
+player.shape("brain.gif")
 player.penup()
 player.goto(100,-250)
 player.direction="stop"
@@ -29,11 +33,11 @@ good_guys = []
 for _ in range(15):
     good_guy = turtle.Turtle()
     good_guy.speed(0)
-    good_guy.shape("circle")
+    good_guy.shape("book.gif")
     good_guy.color("blue")
     good_guy.penup()
     good_guy.goto(100,250)
-    good_guy.speed = random.randint(1 ,2)
+    good_guy.speed = random.randint(1 , 4)
     good_guys.append(good_guy)
 
 bad_guys = []
@@ -41,11 +45,11 @@ bad_guys = []
 for _ in range(10):
     bad_guy = turtle.Turtle()
     bad_guy.speed(0)
-    bad_guy.shape("circle")
+    bad_guy.shape("spike_ball.gif")
     bad_guy.color("red")
     bad_guy.penup()
     bad_guy.goto(-100,250)
-    bad_guy.speed = random.randint(1 ,2)
+    bad_guy.speed = random.randint(1 , 4)
     bad_guys.append(bad_guy)
 
 # make the pen
@@ -57,7 +61,7 @@ pen.shape("circle")
 pen.penup()
 pen.goto(0, 260)
 font = ("Courier", 24, "normal")
-pen.write("Score: {} , Lives: {}".format(score, lives), align="center", font=font)
+pen.write("Knowledge: {} , Lives: {}".format(score, lives), align="center", font=font)
 # functions
 
 def go_left():
@@ -84,12 +88,12 @@ while True:
     # move the player
     if player.direction == "left":
         x = player.xcor()
-        x -= 1
+        x -= 3
         player.setx(x)
 
     if player.direction == "right":
         x = player.xcor()
-        x += 1
+        x += 3
         player.setx(x)
 
     # Move the good guy
@@ -104,13 +108,14 @@ while True:
             good_guy.goto(x, y)
 
         # check for collision
-        if good_guy.distance(player) < 20:
+        if good_guy.distance(player) < 40 :
             x = random.randint(-300,300)
             y = random.randint(300, 400)
             good_guy.goto(x, y)
+            os.system("afplay page_turn.wav&")
             score += 10
             pen.clear()
-            pen.write("Score: {} , Lives: {}".format(score, lives), align="center", font=font)
+            pen.write("Knowledge: {} , Lives: {}".format(score, lives), align="center", font=font)
 
 
 
@@ -125,12 +130,13 @@ while True:
         
 
         # check for collision
-        if bad_guy.distance(player) < 20:
+        if bad_guy.distance(player) < 40:
             x = random.randint(-300,300)
             y = random.randint(300, 400)
             bad_guy.goto(x, y)
+            os.system("afplay page_tear.wav&")
             score -= 10
             lives -= 1
             pen.clear()
-            pen.write("Score: {} , Lives: {}".format(score, lives), align="center", font=font)
+            pen.write("Knowledge: {} , Lives: {}".format(score, lives), align="center", font=font)
 wn.mainloop()
