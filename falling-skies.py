@@ -17,7 +17,7 @@ player.speed(0)
 player.shape("square")
 player.color("white")
 player.penup()
-player.goto(0,-250)
+player.goto(100,-250)
 player.direction="stop"
 
 # create a list of good guys
@@ -30,11 +30,21 @@ for _ in range(15):
     good_guy.shape("circle")
     good_guy.color("blue")
     good_guy.penup()
-    good_guy.goto(0,250)
+    good_guy.goto(100,250)
     good_guy.speed = random.randint(1 ,2)
     good_guys.append(good_guy)
 
+bad_guys = []
 
+for _ in range(10):
+    bad_guy = turtle.Turtle()
+    bad_guy.speed(0)
+    bad_guy.shape("circle")
+    bad_guy.color("red")
+    bad_guy.penup()
+    bad_guy.goto(-100,250)
+    bad_guy.speed = random.randint(1 ,2)
+    bad_guys.append(bad_guy)
 # functions
 
 def go_left():
@@ -85,4 +95,20 @@ while True:
             x = random.randint(-300,300)
             y = random.randint(300, 400)
             good_guy.goto(x, y)
+
+
+    for bad_guy in bad_guys:
+        y = bad_guy.ycor()
+        y-= bad_guy.speed
+        bad_guy.sety(y)
+        if y < -300:
+            x = random.randint(-300,300)
+            y = random.randint(300, 400)
+            bad_guy.goto(x, y)
+
+        # check for collision
+        if bad_guy.distance(player) < 20:
+            x = random.randint(-300,300)
+            y = random.randint(300, 400)
+            bad_guy.goto(x, y)
 wn.mainloop()
