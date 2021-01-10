@@ -3,6 +3,8 @@
 import turtle
 import random
 
+score = 0
+lives = 3
 wn = turtle.Screen()
 wn.title("Falling Skies by Cody Snell")
 wn.bgcolor("green")
@@ -45,6 +47,17 @@ for _ in range(10):
     bad_guy.goto(-100,250)
     bad_guy.speed = random.randint(1 ,2)
     bad_guys.append(bad_guy)
+
+# make the pen
+pen = turtle.Turtle()
+pen.hideturtle()
+pen.speed(0)
+pen.color("white")
+pen.shape("circle")
+pen.penup()
+pen.goto(0, 260)
+font = ("Courier", 24, "normal")
+pen.write("Score: {} , Lives: {}".format(score, lives), align="center", font=font)
 # functions
 
 def go_left():
@@ -95,6 +108,10 @@ while True:
             x = random.randint(-300,300)
             y = random.randint(300, 400)
             good_guy.goto(x, y)
+            score += 10
+            pen.clear()
+            pen.write("Score: {} , Lives: {}".format(score, lives), align="center", font=font)
+
 
 
     for bad_guy in bad_guys:
@@ -105,10 +122,15 @@ while True:
             x = random.randint(-300,300)
             y = random.randint(300, 400)
             bad_guy.goto(x, y)
+        
 
         # check for collision
         if bad_guy.distance(player) < 20:
             x = random.randint(-300,300)
             y = random.randint(300, 400)
             bad_guy.goto(x, y)
+            score -= 10
+            lives -= 1
+            pen.clear()
+            pen.write("Score: {} , Lives: {}".format(score, lives), align="center", font=font)
 wn.mainloop()
