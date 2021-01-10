@@ -20,13 +20,20 @@ player.penup()
 player.goto(0,-250)
 player.direction="stop"
 
-# Add the good guy
-good_guy = turtle.Turtle()
-good_guy.speed(0)
-good_guy.shape("circle")
-good_guy.color("blue")
-good_guy.penup()
-good_guy.goto(0,250)
+# create a list of good guys
+good_guys = []
+
+# Add the good guys
+for _ in range(15):
+    good_guy = turtle.Turtle()
+    good_guy.speed(0)
+    good_guy.shape("circle")
+    good_guy.color("blue")
+    good_guy.penup()
+    good_guy.goto(0,250)
+    good_guy.speed = random.randint(1 ,2)
+    good_guys.append(good_guy)
+
 
 # functions
 
@@ -64,17 +71,18 @@ while True:
 
     # Move the good guy
     # good_guy.sety(good_guy.ycor() - .25)
-    y = good_guy.ycor()
-    y-= .25
-    good_guy.sety(y)
-    if y < -300:
-        x = random.randint(-300,300)
-        y = random.randint(300, 400)
-        good_guy.goto(x, y)
+    for good_guy in good_guys:
+        y = good_guy.ycor()
+        y-= good_guy.speed
+        good_guy.sety(y)
+        if y < -300:
+            x = random.randint(-300,300)
+            y = random.randint(300, 400)
+            good_guy.goto(x, y)
 
-    # check for collision
-    if good_guy.distance(player) < 20:
-        x = random.randint(-300,300)
-        y = random.randint(300, 400)
-        good_guy.goto(x, y)
+        # check for collision
+        if good_guy.distance(player) < 20:
+            x = random.randint(-300,300)
+            y = random.randint(300, 400)
+            good_guy.goto(x, y)
 wn.mainloop()
