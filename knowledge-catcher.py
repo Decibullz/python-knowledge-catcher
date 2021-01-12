@@ -1,4 +1,4 @@
-#  falling skies in python 3 
+#  knowledge catcher in python 3 
 
 import turtle
 import random
