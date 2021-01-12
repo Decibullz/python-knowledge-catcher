@@ -5,6 +5,13 @@ import random
 import os
 import time
 
+# if on windows import winsound
+if platform.system() == "Windows":
+    try:
+        import winsound
+    except:
+        print("winsound module not available")
+
 score = 0
 lives = 3
 
@@ -75,6 +82,17 @@ def go_right():
 def go_nowhere():
     player.direction = "stop"
 
+def play_sound(sound_file, time = 0):
+    # Windows
+    if platform.system() == "Windows":
+        winsound.PlaySound(sound_file, winsound.SND_ASYNC)
+    # Linux
+    elif platform.system() == "Linux":
+        os.system("aplay -q {}&".format(sound_file))
+    # Mac
+    else:
+        os.system("afplay {}&".format(sound_file))
+
 wn.listen()
 
 wn.onkeypress(go_left, "Left")
@@ -122,7 +140,7 @@ while True:
             x = random.randint(-300,300)
             y = random.randint(300, 400)
             good_guy.goto(x, y)
-            os.system("afplay page_turn.wav&")
+            play_sound("page_turn.wav")
             score += 10
             pen.clear()
             pen.write("Knowledge: {} , Lives: {}".format(score, lives), align="center", font=font)
@@ -141,7 +159,7 @@ while True:
 
         # check for collision
         if bad_guy.distance(player) < 30:
-            os.system("afplay page_tear.wav&")
+            play_sound("page_tear.wav")
             score -= 10
             lives -= 1
             pen.clear()
